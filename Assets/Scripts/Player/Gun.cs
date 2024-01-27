@@ -5,7 +5,7 @@ public class Gun : MonoBehaviour
 
     [SerializeField] float damage = 10f;
     [SerializeField] float range = 100f;
-    [SerializeField] float fireRate = 15f;
+    [SerializeField] float fireRate = 4f;
 
     [SerializeField] Camera fpsCam;
     [SerializeField] ParticleSystem muzzleFlash;
@@ -13,10 +13,12 @@ public class Gun : MonoBehaviour
 
     float nextTimeToFire = 0f;
 
+    public bool canShoot = true;
+
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && canShoot)
         {
             nextTimeToFire = Time.time + 1 / fireRate;
             Shoot();
@@ -30,6 +32,7 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
+
             Enemy enemy = hit.transform.GetComponent<Enemy>();
             if(enemy != null)
             {

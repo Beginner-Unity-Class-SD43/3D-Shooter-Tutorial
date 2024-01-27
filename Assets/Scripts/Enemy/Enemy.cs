@@ -12,11 +12,14 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] float damage = 10f;
 
+    Score score;
+
     // Start is called before the first frame update
     void Start()
     {
         player = FindObjectOfType<FPSController>().transform;
         agent = GetComponent<NavMeshAgent>();
+        score = FindObjectOfType<Score>();
     }
 
     // Update is called once per frame
@@ -37,6 +40,7 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        score.AddScore(100);
         Destroy(gameObject);
     }
 

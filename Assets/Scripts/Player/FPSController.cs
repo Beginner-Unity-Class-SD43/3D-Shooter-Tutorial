@@ -31,11 +31,19 @@ public class FPSController : MonoBehaviour
     float health;
 
     CharacterController characterController;
+
+    [SerializeField] GameObject deathScreen;
+
+    Gun gun;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        deathScreen.SetActive(false);
+        gun = GetComponentInChildren<Gun>();
 
         health = maxHealth;
     }
@@ -103,5 +111,19 @@ public class FPSController : MonoBehaviour
     {
         health -= damage;
         healthBar.fillAmount = health / maxHealth;
+
+        if(health <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        deathScreen.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        canMove = false;
+        gun.canShoot = false;
     }
 }

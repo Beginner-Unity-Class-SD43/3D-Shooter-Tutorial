@@ -14,18 +14,26 @@ public class Enemy : MonoBehaviour
 
     Score score;
 
+    bool isDead = false;
+
     // Start is called before the first frame update
     void Start()
     {
         player = FindObjectOfType<FPSController>().transform;
         agent = GetComponent<NavMeshAgent>();
         score = FindObjectOfType<Score>();
+
+        SetRigidbodyState(true);
+        SetColliderState(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        agent.destination = player.position; 
+        if (!isDead)
+        {
+            agent.destination = player.position;
+        }
     }
 
     public void TakeDamage(float damage)
@@ -40,13 +48,43 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        isDead = true;
+        agent.speed = 0f;
+        GetComponent<Animator>().enabled = false;
+        SetRigidbodyState(false);
+        SetColliderState(true);
         score.AddScore(100);
-        Destroy(gameObject);
+        Destroy(gameObject, 3f);
     }
+
+    void SetRigidbodyState(bool state)
+    {
+        Rigidbody[] rigidbodies = GetComponentsInChildren<Rigidbody>();
+
+        foreach (Rigidbody rigidbody in rigidbodies)
+        {
+            rigidbody.isKinematic = state;
+        }
+
+        GetComponent<Rigidbody>().isKinematic = !state;
+    }
+
+    void SetColliderState(bool state)
+    {
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+
+        foreach (Collider collider in colliders)
+        {
+            collider.enabled = state;
+        }
+
+        GetComponent<Collider>().enabled = !state;
+    }
+
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && !isDead)
         {
             collision.gameObject.GetComponent<FPSController>().TakeDamage(damage);
         }

@@ -1020,6 +1020,7 @@ MonoBehaviour:
   fpsCam: {fileID: 963194227}
   muzzleFlash: {fileID: 208080519}
   impactEffect: {fileID: 1000010844420130, guid: ceaaf8c4e7143aa419cdda07e25cbfff, type: 3}
+  canShoot: 1
 --- !u!1 &544949724
 GameObject:
   m_ObjectHideFlags: 0
